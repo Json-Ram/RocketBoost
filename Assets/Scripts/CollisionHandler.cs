@@ -5,6 +5,7 @@ public class CollisionHandler : MonoBehaviour
 {
     int currentSceneIndex;
     int nextSceneIndex;
+    [SerializeField] float levelLoadDelay = 2f;
 
     void Start() {
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
@@ -19,14 +20,28 @@ public class CollisionHandler : MonoBehaviour
                 Debug.Log("This thing is friendly!");
                 break;
             case "Finish":
-                LoadNextLevel();
+                StartSuccessSequence();
                 Debug.Log("This is the finish!");
                 break;
             default:
-                ReloadLevel();
+                StartCrashSequence();
                 Debug.Log("Sorry, you blew up!");
                 break;
         }
+    }
+
+    void StartSuccessSequence()
+    {   
+        //to do add sfx on crash, particle effect
+        GetComponent<Movement>().enabled = false;
+        Invoke("LoadNextLevel", levelLoadDelay);
+    }
+
+    void StartCrashSequence()
+    {      
+        //to do add sfx on crash, particle effect
+        GetComponent<Movement>().enabled = false;
+        Invoke("ReloadLevel", levelLoadDelay);
     }
 
     void LoadNextLevel()
@@ -37,7 +52,7 @@ public class CollisionHandler : MonoBehaviour
         }
         SceneManager.LoadScene(nextSceneIndex);
     }
-    
+
     void ReloadLevel() 
     {   
         SceneManager.LoadScene(currentSceneIndex);
