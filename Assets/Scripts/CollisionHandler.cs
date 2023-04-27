@@ -13,18 +13,42 @@ public class CollisionHandler : MonoBehaviour
     int currentSceneIndex;
     int nextSceneIndex;
     bool isTransitioning = false;
+    bool collisionDisabled = false;
 
     AudioSource audioSource;
 
-    void Start() {
+    void Start() 
+    {
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         nextSceneIndex = currentSceneIndex + 1;
         audioSource = GetComponent<AudioSource>();
     }
 
+    void Update()
+    {
+        RespondToDebugKeys();
+    }
+
+    void RespondToDebugKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ReloadLevel();
+        }
+        else if (Input.GetKeyDown(KeyCode.N))
+        {
+            LoadNextLevel();
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            //toggles collision
+            collisionDisabled = !collisionDisabled;
+        }
+    }
+
     void OnCollisionEnter(Collision other)
     {
-        if (isTransitioning) { return; }
+        if (isTransitioning || collisionDisabled) { return; }
 
         switch (other.gameObject.tag)
         {
