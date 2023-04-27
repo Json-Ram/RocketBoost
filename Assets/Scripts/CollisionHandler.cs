@@ -6,9 +6,14 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] float levelLoadDelay = 2f;
     [SerializeField] AudioClip success;
     [SerializeField] AudioClip crash;
+
+    [SerializeField] ParticleSystem successParticles;
+    [SerializeField] ParticleSystem crashParticles;
+
     int currentSceneIndex;
     int nextSceneIndex;
     bool isTransitioning = false;
+
     AudioSource audioSource;
 
     void Start() {
@@ -36,8 +41,8 @@ public class CollisionHandler : MonoBehaviour
 
     void StartSuccessSequence()
     {   
-        //to do add sfx on crash, particle effect
         isTransitioning = true;
+        successParticles.Play();
         audioSource.Stop();
         audioSource.PlayOneShot(success);
         GetComponent<Movement>().enabled = false;
@@ -46,8 +51,8 @@ public class CollisionHandler : MonoBehaviour
 
     void StartCrashSequence()
     {      
-        //to do add sfx on crash, particle effect
         isTransitioning = true;
+        crashParticles.Play();
         audioSource.Stop();
         audioSource.PlayOneShot(crash);
         GetComponent<Movement>().enabled = false;
